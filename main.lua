@@ -1,5 +1,9 @@
 F = require "framestack"
 
+function love.update()
+  F:update()
+end
+
 function love.draw()
   F:draw()
 end
@@ -11,7 +15,7 @@ green.draw = function()
   love.graphics.rectangle("fill", 0, 0, 500, 500)
 end
 
-local child = green:new(1, "green-child")
+local child = green:new(3, "green-child")
 child.x, child.y = 50, 50
 child.draw = function()
   love.graphics.setColor( 1, 0, 1, 1 )
