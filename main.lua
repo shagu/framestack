@@ -1,11 +1,31 @@
 F = require "framestack"
 
+local metrics = {
+  sum = 0, count = 0,
+  scan = function(self, max)
+    self.max = max
+    self.time = love.timer.getTime()
+  end,
+
+  resolve = function(self)
+    self.sum = self.sum + love.timer.getTime() - self.time
+    self.count = self.count + 1
+
+    if self.count >= self.max then
+      print(string.format("%d iterations took %.4f seconds", self.count, self.sum))
+      self.count, self.sum = 0, 0
+    end
+  end,
+}
+
 function love.update()
   F:update()
 end
 
 function love.draw()
+  metrics:scan(100)
   F:draw()
+  metrics:resolve()
 end
 
 local green = F:new(1, "green")
