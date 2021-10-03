@@ -1,12 +1,9 @@
 framestack = {}
 framestack.frames = {}
-framestack.queue = {}
 
 local function iterate(frames)
-  if not frames then return end
-
-  -- reset frame draw queue
-  framestack.queue = {}
+  local queue = {}
+  if not frames then return queue end
 
   -- iterate over all frame layers
   for id, frame in pairs(frames) do
@@ -17,10 +14,12 @@ local function iterate(frames)
 
     -- queue frame draw
     if framestack.visible(frame) then
-      framestack.queue[frame.layer] = framestack.queue[frame.layer] or {}
-      table.insert(framestack.queue[frame.layer], frame)
+      queue[frame.layer] = queue[frame.layer] or {}
+      table.insert(queue[frame.layer], frame)
     end
   end
+
+  return queue
 end
 
 -- get absolute frame geometry (x,y,width,height)
@@ -69,12 +68,12 @@ end
 
 framestack.update = function(self)
   -- update frames and create draw queue
-  iterate(self.frames)
+  self.queue = iterate(self.frames)
 end
 
 framestack.draw = function(self)
   -- draw framestack queue
-  for layer, frames in pairs(framestack.queue) do
+  for layer, frames in pairs(self.queue) do
     for id, frame in pairs(frames) do
       -- save and transform coordinates
       local x, y = framestack.geom(frame)
