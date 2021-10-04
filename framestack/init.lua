@@ -1,5 +1,6 @@
 framestack = {}
 framestack.frames = {}
+framestack.templates = {}
 
 local function iterate(frames)
   local queue = {}
@@ -38,7 +39,7 @@ framestack.visible = function(frame)
 end
 
 -- creates and registers a new frame
-framestack.new = function(parent, layer, name)
+framestack.new = function(parent, layer, name, ...)
   local parent = parent or framestack and nil
   local layer = layer or parent.layer or 1
   local name = name or "<unnamed>"
@@ -59,6 +60,15 @@ framestack.new = function(parent, layer, name)
     update = nil,
     draw = nil,
   }
+
+  -- apply templates
+  for id, template in pairs({...}) do
+    if not framestack.templates[template] then
+      print("ERROR: Could not find template '" .. template .. "'")
+    else
+      framestack.templates[template](frame)
+    end
+  end
 
   -- add frame to parent layers
   table.insert(framestack.frames, frame)
