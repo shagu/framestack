@@ -1,9 +1,14 @@
 framestack = {}
 framestack.frames = {}
 framestack.templates = {}
+framestack.events = {}
 
-local events = {}
+-- add local shortcuts
+local frames = framestack.frames
+local templates = framestack.templates
+local events = framestack.events
 
+-- iterate over all existing frames
 local function iterate(frames)
   local queue = {}
   if not frames then return queue end
@@ -101,15 +106,15 @@ framestack.new = function(parent, layer, name, ...)
 
   -- apply templates
   for id, template in pairs({...}) do
-    if not framestack.templates[template] then
+    if not templates[template] then
       print("ERROR: Could not find template '" .. template .. "'")
     else
-      framestack.templates[template](frame)
+      templates[template](frame)
     end
   end
 
   -- add frame to parent layers
-  table.insert(framestack.frames, frame)
+  table.insert(frames, frame)
 
   return frame
 end
