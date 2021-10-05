@@ -37,8 +37,13 @@ blue.draw = function(self, x, y, width, height)
   love.graphics.rectangle("fill", 0, 0, width, height)
 end
 
--- add click event to blue
+-- add click to orange and blue
+orange.mouse = true
+orange:on("click", function()
+  print("Orange")
+end)
+
 blue.mouse = true
 blue:on("click", function()
-  print("Hello World")
+  print("Blue")
 end)
