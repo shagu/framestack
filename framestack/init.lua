@@ -23,6 +23,13 @@ local function iterate(frames)
   return queue
 end
 
+-- emit event signal to frame
+framestack.signal = function(frame, event, ...)
+  if frame.on[event] then
+    frame.on[event](frame, event, ...)
+  end
+end
+
 -- get absolute frame geometry (x,y,width,height)
 framestack.geom = function(frame)
   if not frame.parent then return 0, 0, 0, 0 end
@@ -55,6 +62,7 @@ framestack.new = function(parent, layer, name, ...)
     width = 0,
     height = 0,
     show = true,
+    on = {},
 
     new = framestack.new,
     update = nil,
