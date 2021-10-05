@@ -25,8 +25,7 @@ framestack.mouse.focus = function()
 end
 
 -- register mousepressed hook
-framestack.lovehooks["mousepressed"] = true
-framestack.mousepressed = function(x, y, button)
+framestack.lovehooks["mousepressed"] = function(x, y, button)
   local focus = framestack.mouse.focus()
   if not focus then return end
 
@@ -36,8 +35,7 @@ framestack.mousepressed = function(x, y, button)
 end
 
 -- register mousereleased hook
-framestack.lovehooks["mousereleased"] = true
-framestack.mousereleased = function(x, y, button)
+framestack.lovehooks["mousereleased"] = function(x, y, button)
   local focus = framestack.mouse.focus()
   if not focus then return end
 

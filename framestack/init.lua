@@ -2,9 +2,7 @@ framestack = {}
 framestack.frames = {}
 framestack.templates = {}
 framestack.events = {}
-framestack.lovehooks = {
-  ["update"] = true, ["draw"] = true,
-}
+framestack.lovehooks = {}
 
 -- add local shortcuts
 local frames = framestack.frames
@@ -46,13 +44,6 @@ local hook = function(name, func)
   else
     -- add new function
     love[name] = func
-  end
-end
-
--- register on all love functions
-framestack.init = function()
-  for call in pairs(framestack.lovehooks) do
-    hook(call, framestack[call])
   end
 end
 
@@ -145,12 +136,21 @@ framestack.new = function(parent, layer, name, ...)
   return frame
 end
 
-framestack.update = function()
+-- register on all love functions
+framestack.init = function()
+  for call, func in pairs(framestack.lovehooks) do
+    hook(call, func)
+  end
+end
+
+-- register update hook
+framestack.lovehooks["update"] = function()
   -- update frames and create draw queue
   framestack.queue = iterate(frames)
 end
 
-framestack.draw = function()
+-- register draw hook
+framestack.lovehooks["draw"] = function()
   -- draw framestack queue
   for layer, frames in pairs(framestack.queue) do
     for id, frame in pairs(frames) do
