@@ -5,13 +5,8 @@
 require "framestack"
 
 -- register framestack to love update
-function love.update()
-  framestack:update()
-end
-
--- register framestack to love draw
-function love.draw()
-  framestack:draw()
+function love.load()
+  framestack:init()
 end
 
 -- create frame on layer 2
