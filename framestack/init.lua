@@ -2,6 +2,8 @@ framestack = {}
 framestack.frames = {}
 framestack.templates = {}
 
+local events = {}
+
 local function iterate(frames)
   local queue = {}
   if not frames then return queue end
@@ -25,9 +27,28 @@ end
 
 -- emit event signal to frame
 framestack.signal = function(frame, event, ...)
-  if frame.on[event] then
-    frame.on[event](frame, event, ...)
+  -- emit a global event to all registered frames
+  if event and events[event] and (not frame or frame == framestack) then
+    for id, current in pairs(events[event]) do
+      current.events[event](current, event, ...)
+    end
+  elseif frame and frame ~= framestack and frame.events[event] then
+    frame.events[event](frame, event, ...)
   end
+end
+
+-- basic event registry function
+framestack.on = function(self, event, func)
+  -- register event function to frame
+  self.events[event] = func
+
+  -- register frame to event table
+  events[event] = events[event] or {}
+  for id, frame in pairs(events[event]) do
+    if frame == self then return end
+  end
+
+  table.insert(events[event], self)
 end
 
 -- get absolute frame geometry (x,y,width,height)
@@ -55,20 +76,27 @@ framestack.new = function(parent, layer, name, ...)
 
   -- build default frame
   local frame = {
+    -- base
     parent = parent,
     layer = layer,
     name = name,
 
+    -- defaults
     x = 0,
     y = 0,
     width = 0,
     height = 0,
     show = true,
-    on = {},
 
+    -- core functions
     new = framestack.new,
     update = nil,
     draw = nil,
+
+    -- event system
+    signal = framestack.signal,
+    on = framestack.on,
+    events = {},
   }
 
   -- apply templates
