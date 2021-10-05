@@ -3,6 +3,7 @@
 
 -- include core functions
 require "framestack"
+require "framestack/mouse"
 
 -- register framestack to love update
 function love.load()
@@ -35,3 +36,9 @@ blue.draw = function(self, x, y, width, height)
   love.graphics.setColor( 0, 0, 1, 1 )
   love.graphics.rectangle("fill", 0, 0, width, height)
 end
+
+-- add click event to blue
+blue.mouse = true
+blue:on("click", function()
+  print("Hello World")
+end)
