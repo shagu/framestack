@@ -32,9 +32,11 @@ end
 
 -- get absolute frame geometry (x,y,width,height)
 framestack.geom = function(frame)
-  if not frame.parent then return 0, 0, 0, 0 end
-  local x, y = framestack.geom(frame.parent)
-  x, y = x or 0, y or 0
+  local x, y = 0, 0
+  if frame.parent and frame.parent.x then
+    x, y = framestack.geom(frame.parent)
+  end
+
   return frame.x + x, frame.y + y, frame.width, frame.height
 end
 
