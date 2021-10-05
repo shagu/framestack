@@ -96,13 +96,13 @@ framestack.draw = function(self)
   for layer, frames in pairs(self.queue) do
     for id, frame in pairs(frames) do
       -- save and transform coordinates
-      local x, y = framestack.geom(frame)
+      local x, y, width, height = framestack.geom(frame)
       love.graphics.push()
       love.graphics.translate(x, y)
 
       -- draw frame
       if frame.draw then
-        frame:draw()
+        frame:draw(x, y, width, height)
       end
 
       -- reset coordinates
