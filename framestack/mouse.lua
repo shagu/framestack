@@ -1,6 +1,37 @@
+-- This module adds mouse support to the framestack.
+--
+-- Variables:
+--  frame.mouse = 1
+--    Enables mouse support on a frame
+--
+-- Functions:
+--   framestack.mouse.focus()
+--     Finds and returns the current mouseover frame
+--
+-- Events:
+--   frame:on("enter", function(self, event) end)
+--     Fired when the mouse enters the frame
+--
+--   frame:on("leave", function(self, event) end)
+--     Fired when the mouse leaves the frame
+--
+--   frame:on("click", function(self, event, x, y, button) end)
+--     Fired when a mouse click is performed on the frame
+--
+--   frame:on("mousedown", function(self, event, x, y, button) end)
+--     Fired when the mouse button gets pressed
+--
+--   frame:on("mouseup", function(self, event, x, y, button) end)
+--     Fired when the mouse enters the frame
+--
+-- Love2D Hooks:
+--   update, mousepressed, mousereleased
+--
+
 framestack.mouse = {}
 
 local buttonstate = {}
+local lastfocus = nil
 
 -- returns the current frame with mouse focus
 framestack.mouse.focus = function()
@@ -25,7 +56,6 @@ framestack.mouse.focus = function()
 end
 
 -- scan for focus frame change to run enter/leave events
-local lastfocus = nil
 framestack.hook("update", function()
   local focus = framestack.mouse.focus()
 
