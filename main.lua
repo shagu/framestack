@@ -47,3 +47,12 @@ blue.mouse = true
 blue:on("click", function()
   print("Blue")
 end)
+
+-- run something on mouse enter/leave
+blue:on("enter", function()
+  print("Enter Blue")
+end)
+
+blue:on("leave", function()
+  print("Leave Blue")
+end)
