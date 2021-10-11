@@ -32,10 +32,14 @@ framestack.mouse = {}
 
 local buttonstate = {}
 local lastfocus = nil
+local focus = nil
 
 -- returns the current frame with mouse focus
 framestack.mouse.focus = function()
-  local focus = nil
+  -- return if a valid cache was found
+  if focus then return focus end
+
+  focus = framestack
   local mx, my = love.mouse.getPosition()
 
   -- iterate through framestack to find mouse focus
@@ -54,6 +58,11 @@ framestack.mouse.focus = function()
 
   return focus
 end
+
+-- Clear current mouse focus cache each frame update
+framestack.hook("update", function()
+  focus = nil
+end)
 
 -- scan for focus frame change to run enter/leave events
 framestack.hook("update", function()
