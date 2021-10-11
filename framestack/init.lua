@@ -31,22 +31,6 @@ local function iterate(frames)
   return queue
 end
 
--- hook existing functions and append code
-local hook = function(name, func)
-  local previous = love[name]
-
-  if previous then
-    -- hook already existing function
-    love[name] = function(...)
-      previous(...)
-      func(...)
-    end
-  else
-    -- add new function
-    love[name] = func
-  end
-end
-
 -- emit event signal to frame
 framestack.signal = function(frame, event, ...)
   -- emit a global event to all registered frames
@@ -136,21 +120,39 @@ framestack.new = function(parent, layer, name, ...)
   return frame
 end
 
--- register on all love functions
+-- register a new love2d hook
+framestack.hook = function(name, func)
+  framestack.lovehooks[name] = framestack.lovehooks[name] or {}
+  table.insert(framestack.lovehooks[name], func)
+end
+
+-- apply all hooks on love2d functions
 framestack.init = function()
-  for call, func in pairs(framestack.lovehooks) do
-    hook(call, func)
+  for name, data in pairs(framestack.lovehooks) do
+    for id, func in pairs(data) do
+      local previous = love[name]
+      if previous then
+        -- hook already existing function
+        love[name] = function(...)
+          previous(...)
+          func(...)
+        end
+      else
+        -- add new function
+        love[name] = func
+      end
+    end
   end
 end
 
 -- register update hook
-framestack.lovehooks["update"] = function()
+framestack.hook("update", function()
   -- update frames and create draw queue
   framestack.queue = iterate(frames)
-end
+end)
 
 -- register draw hook
-framestack.lovehooks["draw"] = function()
+framestack.hook("draw", function()
   -- draw framestack queue
   for layer, frames in pairs(framestack.queue) do
     for id, frame in pairs(frames) do
@@ -168,6 +170,6 @@ framestack.lovehooks["draw"] = function()
       love.graphics.pop()
     end
   end
-end
+end)
 
 return framestack
