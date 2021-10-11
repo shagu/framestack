@@ -24,6 +24,24 @@ framestack.mouse.focus = function()
   return focus
 end
 
+-- scan for focus frame change to run enter/leave events
+local lastfocus = nil
+framestack.hook("update", function()
+  local focus = framestack.mouse.focus()
+
+  if focus ~= lastfocus then
+    if lastfocus then
+      framestack.signal(lastfocus, "leave")
+    end
+
+    if focus then
+      framestack.signal(focus, "enter")
+    end
+
+    lastfocus = focus
+  end
+end)
+
 -- send mouse event to focused frame and cache button states
 framestack.hook("mousepressed", function(x, y, button)
   local focus = framestack.mouse.focus()
