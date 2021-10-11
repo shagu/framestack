@@ -28,6 +28,9 @@
 --   update, mousepressed, mousereleased
 --
 
+-- break here if module is already loaded
+if framestack.mouse then return end
+
 -- initialize base table
 framestack.mouse = {}
 
