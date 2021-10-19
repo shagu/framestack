@@ -5,18 +5,22 @@
 require "framestack"
 require "framestack/mouse"
 
+-- widgets
+require "framestack/font"
+
 -- register framestack to love update
 function love.load()
   framestack:init()
 end
 
 -- create frame on layer 2
-local orange = framestack:new(2, "orange")
+local orange = framestack:new(2, "orange", "font")
+orange.text = "Example Text"
 orange.x, orange.y = 100, 100
 orange.width, orange.height = 200,200
 orange.draw = function(self, x, y, width, height)
   love.graphics.setColor( 1, .5, 0, 1 )
-  love.graphics.rectangle("fill", 0, 0, width, height)
+  love.graphics.rectangle("line", 0, 0, width, height)
 end
 
 -- create frame on layer 1
