@@ -96,6 +96,7 @@ framestack.new = function(parent, layer, name, ...)
 
     -- core functions
     new = framestack.new,
+    render = {},
     update = nil,
     draw = nil,
 
@@ -160,6 +161,11 @@ framestack.hook("draw", function()
       local x, y, width, height = framestack.geom(frame)
       love.graphics.push()
       love.graphics.translate(x, y)
+
+      -- render templates
+      for template, render in pairs(frame.render) do
+        render(frame, x, y, width, height)
+      end
 
       -- draw frame
       if frame.draw then
