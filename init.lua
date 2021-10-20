@@ -48,8 +48,17 @@
 --   frame.events = {}
 --     Contains a list of all events registered on the frame.
 --
---   frame.render = {}
+--   frame.render = { ["mytemplate"] = func }
 --     The internal render queue, used by templates.
+--
+--   framestack.templates = { ["mytemplate"] = func }
+--     A table that is used to register custom template functions.
+--     The supplied function is called when a template is used via `:new()`
+--     and should transform the `frame` to whatever it shall be.
+--
+--   framestack.hook("love2d.callback", function() end)
+--     Can be used to register a custom module to love2d callbacks.
+--
 
 framestack = {}
 framestack.frames = {}
