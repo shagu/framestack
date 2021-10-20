@@ -25,7 +25,7 @@
 --     Fired when the mouse enters the frame
 --
 -- Love2D Hooks:
---   update, mousepressed, mousereleased
+--   update, mousepressed, mousereleased, touchpressed, touchreleased
 --
 
 -- break here if module is already loaded
@@ -41,12 +41,14 @@ local nilfocus = nil
 local focus = nil
 
 -- returns the current frame with mouse focus
-framestack.mouse.focus = function()
+framestack.mouse.focus = function(tx, ty)
   -- return cache if available
-  if focus then return focus end
+  if focus and not tx and not ty then return focus end
   if nilfocus then return nil end
 
   local mx, my = love.mouse.getPosition()
+  mx = tx or mx
+  my = ty or my
 
   -- iterate through framestack to find mouse focus
   for layer, frames in pairs(framestack.queue) do
@@ -93,6 +95,27 @@ framestack.hook("update", function()
 end)
 
 -- send mouse event to focused frame and cache button states
+framestack.hook("touchpressed", function(id, x, y, dx, dy, pressure)
+  local focus = framestack.mouse.focus(x, y)
+  if not focus then return end
+
+  framestack.signal(focus, "mousedown", x, y, "touch")
+
+  buttonstate["touch"] = focus
+end)
+
+-- send mouse event to focused frame and also detect and send click event
+framestack.hook("touchreleased", function(id, x, y, dx, dy, pressure)
+  local focus = framestack.mouse.focus(x, y)
+  if not focus then return end
+
+  framestack.signal(focus, "mouseup", x, y, "touch")
+
+  if buttonstate["touch"] == focus then
+    framestack.signal(focus, "click", x, y, "touch")
+  end
+end)
+
 framestack.hook("mousepressed", function(x, y, button)
   local focus = framestack.mouse.focus()
   if not focus then return end
