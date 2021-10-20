@@ -1,12 +1,12 @@
 -- This module adds mouse support to the framestack.
 --
 -- Variables:
---  frame.mouse = 1
---    Enables mouse support on a frame
+--   frame.mouse = 1
+--     Enables mouse support on a frame
 --
--- Functions:
---   framestack.mouse.focus()
---     Finds and returns the current mouseover frame
+--  Functions:
+--    framestack.mouse.focus()
+--      Finds and returns the current mouseover frame
 --
 -- Events:
 --   frame:on("enter", function(self, event) end)
