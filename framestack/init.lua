@@ -94,16 +94,14 @@ framestack.new = function(parent, layer, name, ...)
     height = 0,
     show = true,
 
-    -- core functions
-    new = framestack.new,
-    render = {},
-    update = nil,
-    draw = nil,
-
     -- event system
     signal = framestack.signal,
     on = framestack.on,
     events = {},
+
+    -- core functions
+    new = framestack.new,
+    render = {},
   }
 
   -- apply templates
@@ -150,6 +148,8 @@ end
 framestack.hook("update", function()
   -- update frames and create draw queue
   framestack.queue = iterate(frames)
+  -- trigger all update events
+  framestack:signal("update")
 end)
 
 -- register draw hook
@@ -167,10 +167,8 @@ framestack.hook("draw", function()
         render(frame, x, y, width, height)
       end
 
-      -- draw frame
-      if frame.draw then
-        frame:draw(x, y, width, height)
-      end
+      -- trigger frame draw
+      frame:signal("draw", x, y, width, height)
 
       -- reset coordinates
       love.graphics.pop()
