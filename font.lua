@@ -18,6 +18,9 @@
 --    The vertical text align inside the frame.
 --    Can be "TOP", "MIDDLE" or "BOTTOM".
 --
+--  frame.rotate = 0
+--    The radians of the text rotation.
+--
 --  frame.shadow = { pos = "B", color = { 0, 0, 0, 0 } }
 --    The shadow mode of the font. "pos" an one or a combination of:
 --    T = top, B = bottom, L = left, R = right
@@ -27,6 +30,7 @@ framestack.templates["font"] = function(frame)
   -- set core variables
   frame.text = ""
   frame.font = love.graphics.newFont()
+  frame.rotate = 0
   frame.color = { 1, 1, 1, 1 }
   frame.align = "CENTER"
   frame.valign = "MIDDLE"
@@ -59,17 +63,17 @@ framestack.templates["font"] = function(frame)
 
     frame.shadow.pos:gsub(".", function(c)
       if c == "T" then
-        love.graphics.print(frame.text, offx, offy - frame.shadow.offset)
+        love.graphics.print(frame.text, offx, offy - frame.shadow.offset, frame.rotate)
       elseif c == "B" then
-        love.graphics.print(frame.text, offx, offy + frame.shadow.offset)
+        love.graphics.print(frame.text, offx, offy + frame.shadow.offset, frame.rotate)
       elseif c == "L" then
-        love.graphics.print(frame.text, offx - frame.shadow.offset, offy)
+        love.graphics.print(frame.text, offx - frame.shadow.offset, offy, frame.rotate)
       elseif c == "R" then
-        love.graphics.print(frame.text, offx + frame.shadow.offset, offy)
+        love.graphics.print(frame.text, offx + frame.shadow.offset, offy, frame.rotate)
       end
     end)
 
     love.graphics.setColor(unpack(frame.color))
-    love.graphics.print(frame.text, offx, offy)
+    love.graphics.print(frame.text, offx, offy, frame.rotate)
   end
 end
