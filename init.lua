@@ -1,3 +1,56 @@
+-- This is the framestack core.
+-- It provides an event system and takes care of the draw order of each frame.
+--
+-- Variables:
+--   frame.x = 0
+--     The X coordinate of the frame.
+--
+--    frame.y = 0
+--      The Y coordinate of the frame.
+--
+--   frame.width = 0
+--     The width of the frame.
+--
+--   frame.height = 0
+--     The height of the frame.
+--
+--   frame.show = true
+--     Determines if the frame should be shown or not.
+--
+--   frame.name = "<unnamed>"
+--     The frame name, mostly used for debugging.
+--
+--   frame.layer = 1
+--     The current drawlayer of the frame.
+--
+--   frame.parent = nil
+--     The current parent of the frame.
+--
+-- Methods:
+--   frame:new(drawlayer, name, [template1, template2, ...])
+--     Creates a child frame on the current frame. If the parent gets hidden,
+--     the child will also be hidden.
+--
+--   frame:on(event, function)
+--     Runs a function on specified events.
+--
+--   frame:signal(event, [arg1, arg2, ...])
+--     Sends an event to the frame.
+--
+-- Events:
+--   frame:on("update", function(self, event) end)
+--     Fired each update cycle.
+--
+--   frame:on("draw", function(self, event) end)
+--     Fired each draw cycle.
+--
+-- Internal:
+--   frame.events = {}
+--     Contains a list of all events registered on the frame.
+--
+--   frame.render = {}
+--     The internal render queue, used by templates.
+
 framestack = {}
 framestack.frames = {}
 framestack.templates = {}
