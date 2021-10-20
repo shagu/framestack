@@ -22,6 +22,15 @@ require "framestack/font"
 
 The example above will include the `framestack` itself, which takes care of draw layers and the event system. The `mouse` enables support for mouse down, mouse up and click events (also touchpad). Mouse interactions are sent to the frame via events. The `font` is an example widget that makes it easy to transform a frame to a text string.
 
+It's now required, to register framestack on all love functions. This can by done by calling its `:init()` method:
+
+```lua
+-- register framestack to love update
+function love.load()
+  framestack:init()
+end
+```
+
 ### Creating a Frame
 
 Frames can be created by calling `:new()` on the framestack to create a base frame or on another frame to create a child.
