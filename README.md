@@ -1,6 +1,6 @@
 # Framestack
 
-**Warning:This project does not yet provide a stable API and things can change a lot.**
+**Warning: This project does not yet provide a stable API and things can change a lot.**
 
 A simple toolkit for [Love2D](love2d.org/) featuring draw-layers, an event system, widget templates and mouse & touchpad support.
 The **Framestack** aims to be a universal toolkit that assists to get things done.
@@ -42,7 +42,7 @@ orange.x, orange.y = 100, 100
 orange.text = "Example Text"
 ```
 
-In this case, the font template is used which provides basic text drawing functionality and additional attributes such as `.text`.
+In this case, the font template is used which provides basic text drawing functionality and additional attributes such as `.text`. Have a look at the [font.lua](font.lua) to see all possible attributes and functions provided by the template.
 
 ### Event System
 
