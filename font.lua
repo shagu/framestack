@@ -44,6 +44,7 @@ framestack.templates["font"] = function(frame)
   frame.render["font"] = function(frame, x, y, width, height)
     local width = frame.font:getWidth(frame.text)
     local height = frame.font:getHeight(frame.text)
+    local halfw, halfh = width/2, height/2
     local offx, offy = 0, 0
 
     if frame.align == "CENTER" then
@@ -63,17 +64,17 @@ framestack.templates["font"] = function(frame)
 
     frame.shadow.pos:gsub(".", function(c)
       if c == "T" then
-        love.graphics.print(frame.text, offx, offy - frame.shadow.offset, frame.rotate)
+        love.graphics.print(frame.text, offx + halfw, offy + halfh - frame.shadow.offset, frame.rotate, nil, nil, halfw, halfh)
       elseif c == "B" then
-        love.graphics.print(frame.text, offx, offy + frame.shadow.offset, frame.rotate)
+        love.graphics.print(frame.text, offx + halfw, offy + halfh + frame.shadow.offset, frame.rotate, nil, nil, halfw, halfh)
       elseif c == "L" then
-        love.graphics.print(frame.text, offx - frame.shadow.offset, offy, frame.rotate)
+        love.graphics.print(frame.text, offx + halfw - frame.shadow.offset, offy + halfh, frame.rotate, nil, nil, halfw, halfh)
       elseif c == "R" then
-        love.graphics.print(frame.text, offx + frame.shadow.offset, offy, frame.rotate)
+        love.graphics.print(frame.text, offx + halfw + frame.shadow.offset, offy + halfh, frame.rotate, nil, nil, halfw, halfh)
       end
     end)
 
     love.graphics.setColor(unpack(frame.color))
-    love.graphics.print(frame.text, offx, offy, frame.rotate)
+    love.graphics.print(frame.text, offx + halfw, offy + halfh, frame.rotate, nil, nil, halfw, halfh)
   end
 end
