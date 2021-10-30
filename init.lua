@@ -206,6 +206,13 @@ framestack.init = function()
   end
 end
 
+-- register resize hook
+framestack.hook("resize", function(w, h)
+  framestack.x, framestack.y = 0, 0
+  framestack.width = love.graphics.getWidth()
+  framestack.height = love.graphics.getHeight()
+end)
+
 -- register update hook
 framestack.hook("update", function()
   -- update frames and create draw queue
