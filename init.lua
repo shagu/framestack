@@ -66,6 +66,10 @@ framestack.templates = {}
 framestack.events = {}
 framestack.lovehooks = {}
 
+-- set initial dummy values
+framestack.width = 0
+framestack.height = 0
+
 -- add local shortcuts
 local frames = framestack.frames
 local templates = framestack.templates
