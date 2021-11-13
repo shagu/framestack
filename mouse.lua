@@ -114,7 +114,10 @@ framestack.hook("touchreleased", function(id, x, y, dx, dy, pressure)
   end
 end)
 
-framestack.hook("mousepressed", function(x, y, button)
+framestack.hook("mousepressed", function(x, y, button, istouch)
+  -- skip touch, it's already handled in touch events
+  if istouch then return end
+
   local focus = framestack.mouse.focus()
   buttonstate[button] = focus
 
@@ -123,10 +126,13 @@ framestack.hook("mousepressed", function(x, y, button)
 end)
 
 -- send mouse event to focused frame and also detect and send click event
-framestack.hook("mousereleased", function(x, y, button)
-  local focus = framestack.mouse.focus()
+framestack.hook("mousereleased", function(x, y, button, istouch)
+  -- skip touch, it's already handled in touch events
+  if istouch then return end
 
+  local focus = framestack.mouse.focus()
   if not focus then return end
+
   framestack.signal(focus, "mouseup", x, y, button)
   if buttonstate[button] == focus then
     framestack.signal(focus, "click", x, y, button)
