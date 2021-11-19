@@ -33,7 +33,7 @@ framestack.templates["image"] = function(frame)
   frame.blob = { }
   frame.color = { 1, 1, 1, 1 }
   frame.rotate = 0
-  frame.fit = nil
+  frame.fit = true
   frame.align = "CENTER"
   frame.valign = "MIDDLE"
 
