@@ -27,6 +27,7 @@
 --    Can be "TOP", "MIDDLE" or "BOTTOM".
 --
 
+local cache = {}
 framestack.templates["image"] = function(frame)
   -- set core variables
   frame.image = nil
@@ -41,7 +42,14 @@ framestack.templates["image"] = function(frame)
   frame.render["image"] = function(frame, x, y, width, height)
     -- refresh image blob if required
     if not frame.blob[2] or ( frame.blob[2] and frame.blob[2] ~= frame.image ) then
-      frame.blob[1] = love.graphics.newImage(frame.image)
+      -- cache new images per frame
+      cache[frame] = cache[frame] or {}
+      if frame.image and not cache[frame][frame.image] then
+        cache[frame][frame.image] = love.graphics.newImage(frame.image)
+      end
+
+      -- assign new image data to frame
+      frame.blob[1] = cache[frame][frame.image]
       frame.blob[2] = frame.image
     end
 
